@@ -8,6 +8,7 @@ import DashboardOverview from './pages/Dashboard/DashboardOverview';
 import UsersPage from './pages/Users/UsersPage';
 import TransactionsPage from './pages/Transactions/TransactionsPage';
 import SettingsPage from './pages/Settings/SettingsPage';
+import GatewaysPage from './pages/Gateways/GatewaysPage';
 
 function App() {
   return (
@@ -68,6 +69,16 @@ function App() {
               <ProtectedRoute>
                 <DashboardLayout>
                   <TransactionsPage />
+                </DashboardLayout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/dashboard/gateways"
+            element={
+              <ProtectedRoute>
+                <DashboardLayout>
+                  <GatewaysPage />
                 </DashboardLayout>
               </ProtectedRoute>
             }

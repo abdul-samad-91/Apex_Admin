@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
 
 // Create axios instance
 const api = axios.create({
@@ -48,6 +48,7 @@ export const userAPI = {
   getUserById: (id) => api.get(`/users/${id}`),
   updateUser: (id, data) => api.put(`/users/${id}`, data),
   deleteUser: (id) => api.delete(`/users/${id}`),
+  updatePassword: (id, data) => api.put(`/users/${id}/password`, data),
 };
 
 // Transaction APIs
@@ -55,6 +56,22 @@ export const transactionAPI = {
   getAllTransactions: () => api.get('/transactions/getAllTransactions'),
   updateTransactionStatus: (id, status) => 
     api.put(`/transactions/updateTransactionStatus/${id}`, { status }),
+};
+
+// Gateway APIs
+export const gatewayAPI = {
+  getAllGateways: () => api.get('/gateways/getAllGateways'),
+  createGateway: (formData) => api.post('/gateways/gateway', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  }),
+};
+
+// ROI APIs
+export const roiAPI = {
+  getRoi: () => api.get('/roi'),
+  setRoi: (data) => api.post('/roi', data),
 };
 
 export default api;
