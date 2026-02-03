@@ -12,10 +12,18 @@ import {
   Upload,
   CheckCircle,
   XCircle,
+  Trash2,
 } from 'lucide-react';
 
-const GatewayModal = ({ gateway, onClose }) => {
+const GatewayModal = ({ gateway, onClose, onDelete }) => {
   if (!gateway) return null;
+
+  const handleDelete = () => {
+    if (window.confirm(`Are you sure you want to delete ${gateway.bankName}? This action cannot be undone.`)) {
+      onDelete(gateway._id);
+      onClose();
+    }
+  };
 
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
@@ -123,7 +131,14 @@ const GatewayModal = ({ gateway, onClose }) => {
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-end space-x-3 p-6 border-t border-gray-800/50">
+        <div className="flex items-center justify-between p-6 border-t border-gray-800/50">
+          <button
+            onClick={handleDelete}
+            className="flex items-center space-x-2 px-4 py-2.5 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 rounded-xl transition-all duration-200"
+          >
+            <Trash2 className="w-4 h-4" />
+            <span>Delete Gateway</span>
+          </button>
           <button
             onClick={onClose}
             className="px-4 py-2 text-gray-400 hover:text-white transition-colors"
@@ -390,10 +405,6 @@ const GatewaysPage = () => {
   const [selectedGateway, setSelectedGateway] = useState(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
 
-  useEffect(() => {
-    fetchGateways();
-  }, []);
-
   const fetchGateways = async () => {
     try {
       const response = await gatewayAPI.getAllGateways();
@@ -405,6 +416,21 @@ const GatewaysPage = () => {
       setLoading(false);
     }
   };
+
+  const handleDeleteGateway = async (id) => {
+    try {
+      await gatewayAPI.deleteGateway(id);
+      toast.success('Gateway deleted successfully');
+      fetchGateways();
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Failed to delete gateway');
+      console.error('Failed to delete gateway:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchGateways();
+  }, []);
 
   if (loading) {
     return (
@@ -535,13 +561,25 @@ const GatewaysPage = () => {
                 </div>
               </div>
 
-              <button
-                onClick={() => setSelectedGateway(gateway)}
-                className="w-full flex items-center justify-center space-x-2 px-4 py-2.5 bg-[#141414] hover:bg-[#1f1f1f] text-gray-300 rounded-xl transition-colors"
-              >
-                <Eye className="w-4 h-4" />
-                <span>View Details</span>
-              </button>
+              <div className="flex items-center space-x-2">
+                <button
+                  onClick={() => setSelectedGateway(gateway)}
+                  className="flex-1 flex items-center justify-center space-x-2 px-4 py-2.5 bg-[#141414] hover:bg-[#1f1f1f] text-gray-300 rounded-xl transition-colors"
+                >
+                  <Eye className="w-4 h-4" />
+                  <span>View Details</span>
+                </button>
+                <button
+                  onClick={() => {
+                    if (window.confirm(`Are you sure you want to delete ${gateway.bankName}? This action cannot be undone.`)) {
+                      handleDeleteGateway(gateway._id);
+                    }
+                  }}
+                  className="px-4 py-2.5 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 rounded-xl transition-all duration-200"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </div>
             </div>
           ))}
         </div>
@@ -552,6 +590,7 @@ const GatewaysPage = () => {
         <GatewayModal
           gateway={selectedGateway}
           onClose={() => setSelectedGateway(null)}
+          onDelete={handleDeleteGateway}
         />
       )}
 

@@ -9,6 +9,7 @@ import UsersPage from './pages/Users/UsersPage';
 import TransactionsPage from './pages/Transactions/TransactionsPage';
 import SettingsPage from './pages/Settings/SettingsPage';
 import GatewaysPage from './pages/Gateways/GatewaysPage';
+import RoiPage from './pages/Roi/RoiPage';
 
 function App() {
   return (
@@ -89,6 +90,16 @@ function App() {
               <ProtectedRoute>
                 <DashboardLayout>
                   <SettingsPage />
+                </DashboardLayout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/dashboard/roi"
+            element={
+              <ProtectedRoute>
+                <DashboardLayout>
+                  <RoiPage />
                 </DashboardLayout>
               </ProtectedRoute>
             }

@@ -66,6 +66,7 @@ export const gatewayAPI = {
       'Content-Type': 'multipart/form-data',
     },
   }),
+  deleteGateway: (id) => api.delete(`/gateways/gateway/${id}`),
 };
 
 // ROI APIs
