@@ -250,7 +250,6 @@ const UsersPage = () => {
               <tr className="border-b border-gray-800/50">
                 <th className="text-left text-gray-400 font-medium px-6 py-4 text-sm">User</th>
                 <th className="text-left text-gray-400 font-medium px-6 py-4 text-sm">Contact</th>
-                <th className="text-left text-gray-400 font-medium px-6 py-4 text-sm">CNIC</th>
                 <th className="text-left text-gray-400 font-medium px-6 py-4 text-sm">Coins</th>
                 <th className="text-left text-gray-400 font-medium px-6 py-4 text-sm">Status</th>
                 <th className="text-right text-gray-400 font-medium px-6 py-4 text-sm">Actions</th>
@@ -284,7 +283,7 @@ const UsersPage = () => {
                       <p className="text-white text-sm">{user.email}</p>
                       <p className="text-gray-400 text-sm">{user.phoneNumber}</p>
                     </td>
-                    <td className="px-6 py-4 text-gray-300 text-sm">{user.cnic}</td>
+                    {/* <td className="px-6 py-4 text-gray-300 text-sm">{user.apexCoins || 0}</td> */}
                     <td className="px-6 py-4">
                       <span className="text-red-400 font-semibold">{user.apexCoins || 0}</span>
                     </td>

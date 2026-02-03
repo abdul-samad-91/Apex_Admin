@@ -13,6 +13,7 @@ import {
   Shield,
   Bell,
   Building2,
+  TrendingUp,
 } from 'lucide-react';
 
 const Sidebar = ({ isOpen, setIsOpen }) => {
@@ -24,7 +25,8 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
     { name: 'Users', icon: Users, path: '/dashboard/users' },
     { name: 'Transactions', icon: CreditCard, path: '/dashboard/transactions' },
     { name: 'Gateways', icon: Building2, path: '/dashboard/gateways' },
-    { name: 'Settings', icon: Settings, path: '/dashboard/settings' },
+      { name: 'ROI', icon: TrendingUp, path: '/dashboard/roi' },
+      { name: 'Settings', icon: Settings, path: '/dashboard/settings' },
   ];
 
   const handleLogout = () => {
@@ -103,8 +105,15 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
 };
 
 const Header = ({ setIsSidebarOpen }) => {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
   const [showDropdown, setShowDropdown] = useState(false);
+
+  const handleLogout = () => {
+    logout();
+    setShowDropdown(false);
+    navigate('/login');
+  };
 
   return (
     <header className="bg-[#141414]/80 backdrop-blur-xl border-b border-gray-800/50 px-6 py-4">
@@ -161,6 +170,13 @@ const Header = ({ setIsSidebarOpen }) => {
                 >
                   Help & Support
                 </a>
+                <button
+                  onClick={handleLogout}
+                  className="w-full flex items-center space-x-2 px-4 py-2 text-sm text-gray-400 hover:text-white hover:bg-white/5"
+                >
+                  <LogOut className="w-4 h-4" />
+                  <span>Logout</span>
+                </button>
               </div>
             )}
           </div>
