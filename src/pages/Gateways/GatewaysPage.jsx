@@ -54,9 +54,9 @@ const GatewayModal = ({ gateway, onClose, onDelete }) => {
             <div className="bg-[#141414] rounded-xl p-4">
               <div className="flex items-center space-x-3 text-gray-400 mb-2">
                 <Key className="w-4 h-4" />
-                <span className="text-sm">Wallet ID</span>
+                <span className="text-sm">Wallet Name</span>
               </div>
-              <p className="text-white font-medium">{gateway.walletId}</p>
+              <p className="text-white font-medium">{gateway.walletName}</p>
             </div>
 
             <div className="bg-[#141414] rounded-xl p-4">
@@ -94,7 +94,7 @@ const CreateGatewayModal = ({ onClose, onSuccess }) => {
   const [loading, setLoading] = useState(false);
   const [imagePreview, setImagePreview] = useState(null);
   const [formData, setFormData] = useState({
-    walletId: '',
+    walletName: '',
     walletAddress: '',
     image: null,
   });
@@ -110,7 +110,7 @@ const CreateGatewayModal = ({ onClose, onSuccess }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    if (!formData.walletId || !formData.walletAddress) {
+    if (!formData.walletName || !formData.walletAddress) {
       toast.error('Please fill in all required fields');
       return;
     }
@@ -123,7 +123,7 @@ const CreateGatewayModal = ({ onClose, onSuccess }) => {
     setLoading(true);
     try {
       const data = new FormData();
-      data.append('walletId', formData.walletId);
+      data.append('walletName', formData.walletName);
       data.append('walletAddress', formData.walletAddress);
       data.append('image', formData.image);
 
@@ -188,14 +188,14 @@ const CreateGatewayModal = ({ onClose, onSuccess }) => {
           <div className="grid grid-cols-1 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
-                Wallet ID *
+                Wallet Name *
               </label>
               <input
                 type="text"
-                value={formData.walletId}
-                onChange={(e) => setFormData({ ...formData, walletId: e.target.value })}
+                value={formData.walletName}
+                onChange={(e) => setFormData({ ...formData, walletName: e.target.value })}
                 className="w-full bg-[#141414] border border-gray-800 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-red-500 transition-colors"
-                placeholder="Enter wallet ID"
+                placeholder="Enter wallet name"
               />
             </div>
 
@@ -352,15 +352,15 @@ const GatewaysPage = () => {
                   )}
                   <div>
                     <h3 className="text-white font-semibold">Wallet Gateway</h3>
-                    <p className="text-gray-400 text-sm">{gateway.walletId}</p>
+                    <p className="text-gray-400 text-sm">{gateway.walletName}</p>
                   </div>
                 </div>
               </div>
 
               <div className="space-y-2 mb-4">
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-gray-400">Wallet ID</span>
-                  <span className="text-white font-mono">{gateway.walletId}</span>
+                  <span className="text-gray-400">Wallet Name</span>
+                  <span className="text-white font-mono">{gateway.walletName}</span>
                 </div>
                 <div className="text-sm">
                   <span className="text-gray-400 block mb-1">Address</span>
