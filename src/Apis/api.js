@@ -75,4 +75,11 @@ export const roiAPI = {
   setRoi: (data) => api.post('/roi', data),
 };
 
+// ApexCoin Rate APIs
+export const apexCoinRateAPI = {
+  getCurrentRate: () => api.get('/apexcoinRate/currentRate'),
+  setRate: (data) => api.post('/apexcoinRate/setRate', data),
+  getAllRates: () => api.get('/apexcoinRate/allRates'),
+};
+
 export default api;

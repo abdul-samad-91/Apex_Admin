@@ -10,6 +10,7 @@ import TransactionsPage from './pages/Transactions/TransactionsPage';
 import SettingsPage from './pages/Settings/SettingsPage';
 import GatewaysPage from './pages/Gateways/GatewaysPage';
 import RoiPage from './pages/Roi/RoiPage';
+import ApexCoinRatePage from './pages/ApexCoinRate/ApexCoinRatePage';
 
 function App() {
   return (
@@ -100,6 +101,16 @@ function App() {
               <ProtectedRoute>
                 <DashboardLayout>
                   <RoiPage />
+                </DashboardLayout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/dashboard/apexcoin-rate"
+            element={
+              <ProtectedRoute>
+                <DashboardLayout>
+                  <ApexCoinRatePage />
                 </DashboardLayout>
               </ProtectedRoute>
             }

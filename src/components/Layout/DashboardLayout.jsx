@@ -14,6 +14,7 @@ import {
   Bell,
   Building2,
   TrendingUp,
+  DollarSign,
 } from 'lucide-react';
 
 const Sidebar = ({ isOpen, setIsOpen }) => {
@@ -25,8 +26,9 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
     { name: 'Users', icon: Users, path: '/dashboard/users' },
     { name: 'Transactions', icon: CreditCard, path: '/dashboard/transactions' },
     { name: 'Gateways', icon: Building2, path: '/dashboard/gateways' },
-      { name: 'ROI', icon: TrendingUp, path: '/dashboard/roi' },
-      { name: 'Settings', icon: Settings, path: '/dashboard/settings' },
+    { name: 'ROI', icon: TrendingUp, path: '/dashboard/roi' },
+    { name: 'ApexCoin Rate', icon: DollarSign, path: '/dashboard/apexcoin-rate' },
+    { name: 'Settings', icon: Settings, path: '/dashboard/settings' },
   ];
 
   const handleLogout = () => {
