@@ -49,6 +49,8 @@ export const userAPI = {
   updateUser: (id, data) => api.put(`/users/${id}`, data),
   deleteUser: (id) => api.delete(`/users/${id}`),
   updatePassword: (id, data) => api.put(`/users/${id}/password`, data),
+  getPendingUnlocks: () => api.get('/users/pendingUnlocks'),
+  approveUnlock: (data) => api.post('/users/approveUnlock', data),
 };
 
 // Transaction APIs
