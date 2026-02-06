@@ -161,12 +161,20 @@ const UserModal = ({ user, onClose }) => {
                         <span className="text-white ml-2 font-medium">{entry.daysElapsed}</span>
                       </div>
                       <div>
-                        <span className="text-gray-400">Monthly Profit:</span>
-                        <span className="text-emerald-400 ml-2 font-medium">${entry.monthlyProfit}</span>
+                        <span className="text-gray-400">Daily Profit:</span>
+                        <span className="text-emerald-400 ml-2 font-medium">${entry.dailyProfit}</span>
                       </div>
                       <div>
                         <span className="text-gray-400">Total Profit:</span>
                         <span className="text-emerald-400 ml-2 font-medium">${entry.totalProfit}</span>
+                      </div>
+                      <div>
+                        <span className="text-gray-400">Claimable Now:</span>
+                        <span className="text-yellow-400 ml-2 font-medium">${entry.claimableProfit || 0}</span>
+                      </div>
+                      <div>
+                        <span className="text-gray-400">Days Since Claim:</span>
+                        <span className="text-white ml-2 font-medium">{entry.daysSinceLastClaim || 0}</span>
                       </div>
                     </div>
                   </div>
@@ -177,6 +185,10 @@ const UserModal = ({ user, onClose }) => {
                   <div className="flex items-center justify-between">
                     <span className="text-gray-400">Total Locked Amount:</span>
                     <span className="text-white font-semibold">{user.roiData.totalLockedAmount.toLocaleString()} AC</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-gray-400">Total Claimable Profit:</span>
+                    <span className="text-yellow-400 font-semibold">${user.roiData.totalClaimableAmount?.toFixed(2) || '0.00'}</span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-gray-400">Current ROI Rate:</span>

@@ -51,6 +51,7 @@ export const userAPI = {
   updatePassword: (id, data) => api.put(`/users/${id}/password`, data),
   getPendingUnlocks: () => api.get('/users/pendingUnlocks'),
   approveUnlock: (data) => api.post('/users/approveUnlock', data),
+  claimDailyProfits: () => api.post('/users/claimDailyProfits'),
 };
 
 // Transaction APIs
