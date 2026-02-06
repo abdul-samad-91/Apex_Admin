@@ -11,6 +11,7 @@ import SettingsPage from './pages/Settings/SettingsPage';
 import GatewaysPage from './pages/Gateways/GatewaysPage';
 import RoiPage from './pages/Roi/RoiPage';
 import ApexCoinRatePage from './pages/ApexCoinRate/ApexCoinRatePage';
+import UnlockRequestsPage from './pages/UnlockRequests/UnlockRequestsPage';
 
 function App() {
   return (
@@ -111,6 +112,16 @@ function App() {
               <ProtectedRoute>
                 <DashboardLayout>
                   <ApexCoinRatePage />
+                </DashboardLayout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/dashboard/unlock-requests"
+            element={
+              <ProtectedRoute>
+                <DashboardLayout>
+                  <UnlockRequestsPage />
                 </DashboardLayout>
               </ProtectedRoute>
             }

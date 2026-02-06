@@ -100,6 +100,23 @@ const UserModal = ({ user, onClose }) => {
               <p className="text-white font-medium">{user.apexCoins || 0}</p>
             </div>
 
+            <div className="bg-[#141414] rounded-xl p-4">
+              <div className="flex items-center space-x-3 text-gray-400 mb-2">
+                <Coins className="w-4 h-4" />
+                <span className="text-sm">Locked Coins</span>
+              </div>
+              <p className="text-emerald-400 font-medium">{user.lockedApexCoins || 0}</p>
+            </div>
+
+            {user.referralCode && (
+              <div className="bg-[#141414] rounded-xl p-4">
+                <div className="flex items-center space-x-3 text-gray-400 mb-2">
+                  <span className="text-sm">Referral Code</span>
+                </div>
+                <p className="text-white font-medium font-mono">{user.referralCode}</p>
+              </div>
+            )}
+
             <div className="bg-[#141414] rounded-xl p-4 sm:col-span-2">
               <div className="flex items-center space-x-3 text-gray-400 mb-2">
                 <Calendar className="w-4 h-4" />
@@ -114,6 +131,73 @@ const UserModal = ({ user, onClose }) => {
               </p>
             </div>
           </div>
+
+          {/* Locked Entries Section */}
+          {user.roiData?.lockedEntries && user.roiData.lockedEntries.length > 0 && (
+            <div className="mt-6">
+              <h4 className="text-lg font-semibold text-white mb-4">Locked Coins Entries</h4>
+              <div className="space-y-3">
+                {user.roiData.lockedEntries.map((entry, index) => (
+                  <div key={entry.entryId} className="bg-[#141414] rounded-xl p-4">
+                    <div className="flex items-center justify-between mb-3">
+                      <span className="text-sm font-medium text-gray-400">Lock #{index + 1}</span>
+                      <span className={`px-2 py-1 rounded-lg text-xs font-medium ${
+                        entry.status === 'active' 
+                          ? 'bg-emerald-500/20 text-emerald-400'
+                          : entry.status === 'unlock-pending'
+                          ? 'bg-yellow-500/20 text-yellow-400'
+                          : 'bg-gray-500/20 text-gray-400'
+                      }`}>
+                        {entry.status}
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-2 gap-3 text-sm">
+                      <div>
+                        <span className="text-gray-400">Amount:</span>
+                        <span className="text-white ml-2 font-medium">{entry.amount.toLocaleString()} AC</span>
+                      </div>
+                      <div>
+                        <span className="text-gray-400">Days Elapsed:</span>
+                        <span className="text-white ml-2 font-medium">{entry.daysElapsed}</span>
+                      </div>
+                      <div>
+                        <span className="text-gray-400">Daily Profit:</span>
+                        <span className="text-emerald-400 ml-2 font-medium">${entry.dailyProfit}</span>
+                      </div>
+                      <div>
+                        <span className="text-gray-400">Total Profit:</span>
+                        <span className="text-emerald-400 ml-2 font-medium">${entry.totalProfit}</span>
+                      </div>
+                      <div>
+                        <span className="text-gray-400">Claimable Now:</span>
+                        <span className="text-yellow-400 ml-2 font-medium">${entry.claimableProfit || 0}</span>
+                      </div>
+                      <div>
+                        <span className="text-gray-400">Days Since Claim:</span>
+                        <span className="text-white ml-2 font-medium">{entry.daysSinceLastClaim || 0}</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-4 bg-red-500/10 rounded-xl p-4">
+                <div className="text-sm space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-gray-400">Total Locked Amount:</span>
+                    <span className="text-white font-semibold">{user.roiData.totalLockedAmount.toLocaleString()} AC</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-gray-400">Total Claimable Profit:</span>
+                    <span className="text-yellow-400 font-semibold">${user.roiData.totalClaimableAmount?.toFixed(2) || '0.00'}</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-gray-400">Current ROI Rate:</span>
+                    <span className="text-red-400 font-semibold">{user.currentRoiRate}%</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Footer */}
