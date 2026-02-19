@@ -16,6 +16,7 @@ import {
   TrendingUp,
   DollarSign,
   Unlock,
+  ArrowDownToLine,
 } from 'lucide-react';
 
 const Sidebar = ({ isOpen, setIsOpen }) => {
@@ -26,6 +27,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
     { name: 'Dashboard', icon: LayoutDashboard, path: '/dashboard' },
     { name: 'Users', icon: Users, path: '/dashboard/users' },
     { name: 'Transactions', icon: CreditCard, path: '/dashboard/transactions' },
+    { name: 'Withdrawals', icon: ArrowDownToLine, path: '/dashboard/withdrawals' },
     { name: 'Unlock Requests', icon: Unlock, path: '/dashboard/unlock-requests' },
     { name: 'Gateways', icon: Building2, path: '/dashboard/gateways' },
     { name: 'ROI', icon: TrendingUp, path: '/dashboard/roi' },
