@@ -85,4 +85,12 @@ export const apexCoinRateAPI = {
   getAllRates: () => api.get('/apexcoinRate/allRates'),
 };
 
+// Withdrawal APIs
+export const withdrawalAPI = {
+  getAllWithdrawals: () => api.get('/withdrawals/all'),
+  getPendingWithdrawals: () => api.get('/withdrawals/pending'),
+  updateWithdrawalStatus: (withdrawalId, data) => 
+    api.put(`/withdrawals/${withdrawalId}/status`, data),
+};
+
 export default api;
