@@ -300,7 +300,7 @@ const WithdrawalsPage = () => {
                     <DollarSign className="w-4 h-4" />
                     <span>Amount</span>
                   </div>
-                  <p className="text-3xl font-bold text-emerald-400">${withdrawal.amount?.toFixed(2)}</p>
+                  <p className="text-3xl font-bold text-emerald-400">${withdrawal.amountAfterFee?.toFixed(2)}</p>
                   <div>{getStatusBadge(withdrawal.status)}</div>
                 </div>
 
