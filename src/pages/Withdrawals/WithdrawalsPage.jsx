@@ -39,12 +39,15 @@ const WithdrawalsPage = () => {
     }
   };
 
-  const handleUpdateStatus = async (withdrawalId, status, rejectionReason = null) => {
+  const handleUpdateStatus = async (withdrawalId, status, rejectionReason = null, transactionID = null) => {
     try {
       setProcessing(withdrawalId);
       const payload = { status };
       if (rejectionReason) {
         payload.rejectionReason = rejectionReason;
+      }
+      if (transactionID) {
+        payload.transactionID = transactionID;
       }
       const response = await withdrawalAPI.updateWithdrawalStatus(withdrawalId, payload);
       toast.success(response.data.message || `Withdrawal ${status} successfully`);
@@ -63,9 +66,13 @@ const WithdrawalsPage = () => {
   };
 
   const handleApprove = (withdrawalId) => {
-    if (window.confirm('Are you sure you want to approve this withdrawal?')) {
-      handleUpdateStatus(withdrawalId, 'completed');
+    const transactionID = window.prompt('Enter the Transaction ID for this withdrawal approval:');
+    if (transactionID === null) return; // cancelled
+    if (!transactionID.trim()) {
+      toast.error('Transaction ID is required to approve a withdrawal');
+      return;
     }
+    handleUpdateStatus(withdrawalId, 'completed', null, transactionID.trim());
   };
 
   const handleReject = (withdrawalId) => {
@@ -388,6 +395,12 @@ const WithdrawalsPage = () => {
                     <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-3 text-center">
                       <CheckCircle className="w-8 h-8 text-emerald-400 mx-auto mb-1" />
                       <p className="text-xs text-emerald-400 font-medium">Completed</p>
+                      {withdrawal.transactionID && (
+                        <div className="mt-2 bg-gray-900/50 rounded-lg p-2 text-left">
+                          <p className="text-xs text-gray-400 mb-1">Transaction ID:</p>
+                          <p className="text-xs text-gray-200 font-mono break-all">{withdrawal.transactionID}</p>
+                        </div>
+                      )}
                       {withdrawal.processedAt && (
                         <p className="text-xs text-gray-400 mt-1">{formatDate(withdrawal.processedAt)}</p>
                       )}
