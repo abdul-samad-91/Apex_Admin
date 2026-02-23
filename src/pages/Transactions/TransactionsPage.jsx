@@ -122,14 +122,14 @@ const TransactionModal = ({ transaction, onClose, onUpdateStatus }) => {
         {transaction.status === 'pending' && (
           <div className="flex items-center justify-end space-x-3 p-6 border-t border-gray-800/50">
             <button
-              onClick={() => onUpdateStatus(transaction._id, 'rejected')}
+              onClick={() => onUpdateStatus(transaction.id, 'rejected')}
               className="flex items-center space-x-2 px-4 py-2.5 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-xl transition-colors"
             >
               <XCircle className="w-5 h-5" />
               <span className="font-medium">Reject</span>
             </button>
             <button
-              onClick={() => onUpdateStatus(transaction._id, 'approved')}
+              onClick={() => onUpdateStatus(transaction.id, 'approved')}
               className="flex items-center space-x-2 px-4 py-2.5 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 rounded-xl transition-colors"
             >
               <CheckCircle className="w-5 h-5" />
@@ -170,7 +170,7 @@ const TransactionsPage = () => {
       await transactionAPI.updateTransactionStatus(transactionId, status);
       toast.success(`Transaction ${status} successfully`);
       setTransactions(transactions.map((t) =>
-        t._id === transactionId ? { ...t, status } : t
+        t.id === transactionId ? { ...t, status } : t
       ));
       setSelectedTransaction(null);
     } catch (error) {
@@ -324,7 +324,7 @@ const TransactionsPage = () => {
               {filteredTransactions.length > 0 ? (
                 filteredTransactions.map((transaction) => (
                   <tr
-                    key={transaction._id}
+                    key={transaction.id}
                     className="border-b border-gray-800/30 hover:bg-white/5 transition-colors"
                   >
                     <td className="px-6 py-4">
@@ -357,14 +357,14 @@ const TransactionsPage = () => {
                         {transaction.status === 'pending' && (
                           <>
                             <button
-                              onClick={() => handleUpdateStatus(transaction._id, 'approved')}
+                              onClick={() => handleUpdateStatus(transaction.id, 'approved')}
                               className="p-2 text-emerald-400 hover:bg-emerald-500/10 rounded-lg transition-colors"
                               title="Approve"
                             >
                               <CheckCircle className="w-4 h-4" />
                             </button>
                             <button
-                              onClick={() => handleUpdateStatus(transaction._id, 'rejected')}
+                              onClick={() => handleUpdateStatus(transaction.id, 'rejected')}
                               className="p-2 text-red-400 hover:bg-red-500/10 rounded-lg transition-colors"
                               title="Reject"
                             >

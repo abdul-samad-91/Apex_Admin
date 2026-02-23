@@ -243,7 +243,7 @@ const UsersPage = () => {
     try {
       await userAPI.deleteUser(userId);
       toast.success('User deleted successfully');
-      setUsers(users.filter((u) => u._id !== userId));
+      setUsers(users.filter((u) => u.id !== userId));
     } catch (error) {
       toast.error('Failed to delete user');
       console.error('Failed to delete user:', error);
@@ -254,8 +254,8 @@ const UsersPage = () => {
     try {
       await userAPI.updateUser(userId, { isActive: !currentStatus });
       toast.success(`User ${!currentStatus ? 'activated' : 'deactivated'} successfully`);
-      setUsers(users.map((u) => 
-        u._id === userId ? { ...u, isActive: !currentStatus } : u
+      setUsers(users.map((u) =>
+        u.id === userId ? { ...u, isActive: !currentStatus } : u
       ));
     } catch (error) {
       toast.error('Failed to update user status');
@@ -343,7 +343,7 @@ const UsersPage = () => {
               {filteredUsers.length > 0 ? (
                 filteredUsers.map((user) => (
                   <tr
-                    key={user._id}
+                    key={user.id}
                     className="border-b border-gray-800/30 hover:bg-white/5 transition-colors"
                   >
                     <td className="px-6 py-4">
@@ -390,7 +390,7 @@ const UsersPage = () => {
                           <Eye className="w-4 h-4" />
                         </button>
                         <button
-                          onClick={() => handleToggleStatus(user._id, user.isActive)}
+                          onClick={() => handleToggleStatus(user.id, user.isActive)}
                           className={`p-2 rounded-lg transition-colors ${
                             user.isActive
                               ? 'text-yellow-400 hover:bg-yellow-500/10'
@@ -401,7 +401,7 @@ const UsersPage = () => {
                           {user.isActive ? <UserX className="w-4 h-4" /> : <UserCheck className="w-4 h-4" />}
                         </button>
                         <button
-                          onClick={() => handleDeleteUser(user._id)}
+                          onClick={() => handleDeleteUser(user.id)}
                           className="p-2 text-red-400 hover:bg-red-500/10 rounded-lg transition-colors"
                           title="Delete User"
                         >

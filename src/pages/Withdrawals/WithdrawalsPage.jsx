@@ -47,7 +47,7 @@ const WithdrawalsPage = () => {
         payload.rejectionReason = rejectionReason;
       }
       if (transactionID) {
-        payload.transactionID = transactionID;
+        payload.transactionId = transactionID;
       }
       const response = await withdrawalAPI.updateWithdrawalStatus(withdrawalId, payload);
       toast.success(response.data.message || `Withdrawal ${status} successfully`);
@@ -187,7 +187,7 @@ const WithdrawalsPage = () => {
             {stats.pending} Pending
           </div>
           <div className="bg-gray-800/50 text-gray-300 px-4 py-2 rounded-xl font-semibold">
-            ${stats.pendingAmount.toFixed(2)}
+            ${typeof stats.pendingAmount === 'number' ? stats.pendingAmount.toFixed(2) : '0.00'}
           </div>
         </div>
       </div>
@@ -234,7 +234,7 @@ const WithdrawalsPage = () => {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-gray-400 text-sm">Total Amount</p>
-              <p className="text-2xl font-bold text-white mt-1">${stats.totalAmount.toFixed(2)}</p>
+              <p className="text-2xl font-bold text-white mt-1">${typeof stats.totalAmount === 'number' ? stats.totalAmount.toFixed(2) : '0.00'}</p>
             </div>
             <div className="w-12 h-12 bg-red-500/20 rounded-xl flex items-center justify-center">
               <DollarSign className="w-6 h-6 text-red-400" />
@@ -286,7 +286,7 @@ const WithdrawalsPage = () => {
         <div className="space-y-4">
           {filteredWithdrawals.map((withdrawal) => (
             <div
-              key={withdrawal._id}
+              key={withdrawal.id}
               className="bg-[#1a1a1a] rounded-2xl p-6 border border-gray-800/50 hover:border-red-500/30 transition-all"
             >
               <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
@@ -344,11 +344,11 @@ const WithdrawalsPage = () => {
                   {withdrawal.status === 'pending' ? (
                     <div className="space-y-2">
                       <button
-                        onClick={() => handleMarkAsProcessing(withdrawal._id)}
-                        disabled={processing === withdrawal._id}
+                        onClick={() => handleMarkAsProcessing(withdrawal.id)}
+                        disabled={processing === withdrawal.id}
                         className="w-full bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-xl font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
                       >
-                        {processing === withdrawal._id ? (
+                        {processing === withdrawal.id ? (
                           <>
                             <Loader2 className="w-4 h-4 animate-spin" />
                             <span>Updating...</span>
@@ -361,11 +361,11 @@ const WithdrawalsPage = () => {
                         )}
                       </button>
                       <button
-                        onClick={() => handleApprove(withdrawal._id)}
-                        disabled={processing === withdrawal._id}
+                        onClick={() => handleApprove(withdrawal.id)}
+                        disabled={processing === withdrawal.id}
                         className="w-full bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-xl font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
                       >
-                        {processing === withdrawal._id ? (
+                        {processing === withdrawal.id ? (
                           <>
                             <Loader2 className="w-4 h-4 animate-spin" />
                             <span>Processing...</span>
@@ -378,8 +378,8 @@ const WithdrawalsPage = () => {
                         )}
                       </button>
                       <button
-                        onClick={() => handleReject(withdrawal._id)}
-                        disabled={processing === withdrawal._id}
+                        onClick={() => handleReject(withdrawal.id)}
+                        disabled={processing === withdrawal.id}
                         className="w-full bg-red-500/20 hover:bg-red-500/30 text-red-400 px-4 py-2 rounded-xl font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
                       >
                         <XCircle className="w-4 h-4" />
@@ -395,10 +395,10 @@ const WithdrawalsPage = () => {
                     <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-3 text-center">
                       <CheckCircle className="w-8 h-8 text-emerald-400 mx-auto mb-1" />
                       <p className="text-xs text-emerald-400 font-medium">Completed</p>
-                      {withdrawal.transactionID && (
+                      {withdrawal.transactionId && (
                         <div className="mt-2 bg-gray-900/50 rounded-lg p-2 text-left">
                           <p className="text-xs text-gray-400 mb-1">Transaction ID:</p>
-                          <p className="text-xs text-gray-200 font-mono break-all">{withdrawal.transactionID}</p>
+                          <p className="text-xs text-gray-200 font-mono break-all">{withdrawal.transactionId}</p>
                         </div>
                       )}
                       {withdrawal.processedAt && (
@@ -412,11 +412,11 @@ const WithdrawalsPage = () => {
                         <p className="text-xs text-blue-400 font-medium">Processing</p>
                       </div>
                       <button
-                        onClick={() => handleApprove(withdrawal._id)}
-                        disabled={processing === withdrawal._id}
+                        onClick={() => handleApprove(withdrawal.id)}
+                        disabled={processing === withdrawal.id}
                         className="w-full bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-xl font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
                       >
-                        {processing === withdrawal._id ? (
+                        {processing === withdrawal.id ? (
                           <>
                             <Loader2 className="w-4 h-4 animate-spin" />
                             <span>Completing...</span>

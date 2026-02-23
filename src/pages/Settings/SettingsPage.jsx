@@ -38,7 +38,7 @@ const SettingsPage = () => {
   const handleProfileUpdate = async (e) => {
     e.preventDefault();
     try {
-      await userAPI.updateUser(user?._id, profileData);
+      await userAPI.updateUser(user?.id, profileData);
       toast.success('Profile updated successfully');
     } catch (error) {
       toast.error(error.response?.data?.message || 'Failed to update profile');
@@ -52,7 +52,7 @@ const SettingsPage = () => {
       return;
     }
     try {
-      await userAPI.updatePassword(user?._id, {
+      await userAPI.updatePassword(user?.id, {
         currentPassword: passwordData.currentPassword,
         newPassword: passwordData.newPassword,
       });

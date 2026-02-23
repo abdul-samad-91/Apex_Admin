@@ -252,7 +252,7 @@ const DashboardOverview = () => {
           <div className="space-y-2">
             {recentTransactions.length > 0 ? (
               recentTransactions.map((transaction) => (
-                <RecentTransactionRow key={transaction._id} transaction={transaction} />
+                <RecentTransactionRow key={transaction.id} transaction={transaction} />
               ))
             ) : (
               <p className="text-gray-400 text-center py-8">No transactions yet</p>
@@ -271,7 +271,7 @@ const DashboardOverview = () => {
           <div className="space-y-2">
             {recentUsers.length > 0 ? (
               recentUsers.map((user) => (
-                <RecentUserRow key={user._id} user={user} />
+                <RecentUserRow key={user.id} user={user} />
               ))
             ) : (
               <p className="text-gray-400 text-center py-8">No users yet</p>

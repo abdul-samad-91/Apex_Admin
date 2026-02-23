@@ -156,7 +156,7 @@ const ApexCoinRatePage = () => {
             ) : (
               rateHistory.map((rate, index) => (
                 <div
-                  key={rate._id}
+                  key={rate.id}
                   className="p-4 bg-[#141414] rounded-xl border border-gray-800/50 hover:border-gray-700 transition-colors"
                 >
                   <div className="flex items-center justify-between">

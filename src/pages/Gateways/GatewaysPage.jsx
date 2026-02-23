@@ -17,7 +17,7 @@ const GatewayModal = ({ gateway, onClose, onDelete }) => {
 
   const handleDelete = () => {
     if (window.confirm(`Are you sure you want to delete this gateway? This action cannot be undone.`)) {
-      onDelete(gateway._id);
+      onDelete(gateway.id);
       onClose();
     }
   };
@@ -334,7 +334,7 @@ const GatewaysPage = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {gateways.map((gateway) => (
             <div
-              key={gateway._id}
+              key={gateway.id}
               className="bg-[#1a1a1a]/80 backdrop-blur-xl rounded-2xl border border-gray-800/50 p-6 hover:border-red-500/30 transition-all duration-300"
             >
               <div className="flex items-start justify-between mb-4">
@@ -379,7 +379,7 @@ const GatewaysPage = () => {
                 <button
                   onClick={() => {
                     if (window.confirm(`Are you sure you want to delete this gateway? This action cannot be undone.`)) {
-                      handleDeleteGateway(gateway._id);
+                      handleDeleteGateway(gateway.id);
                     }
                   }}
                   className="px-4 py-2.5 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 rounded-xl transition-all duration-200"
