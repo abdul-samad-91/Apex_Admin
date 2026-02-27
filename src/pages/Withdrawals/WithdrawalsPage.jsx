@@ -297,7 +297,11 @@ const WithdrawalsPage = () => {
                     <span>User Information</span>
                   </div>
                   <p className="text-white font-semibold">{withdrawal.user?.fullName || 'N/A'}</p>
-                  <p className="text-gray-400 text-sm">{withdrawal.user?.email || 'N/A'}</p>
+                  <p className="text-gray-400 text-sm">
+                    {withdrawal.user?.email && withdrawal.user.email.length > 25
+                      ? `${withdrawal.user.email.slice(0, 4)}...${withdrawal.user.email.slice(-6)}`
+                      : withdrawal.user?.email || 'N/A'}
+                  </p>
                   <p className="text-gray-500 text-xs font-mono">{withdrawal.withdrawalId}</p>
                 </div>
 

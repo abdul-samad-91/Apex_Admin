@@ -49,7 +49,11 @@ const RecentTransactionRow = ({ transaction }) => {
           <CreditCard className="w-5 h-5 text-red-400" />
         </div>
         <div>
-          <p className="text-white font-medium">{transaction.transactionId}</p>
+          <p className="text-white font-medium">
+            {transaction.transactionId.length > 16
+              ? `${transaction.transactionId.slice(0, 8)}...${transaction.transactionId.slice(-4)}`
+              : transaction.transactionId}
+          </p>
           <p className="text-gray-400 text-sm">{transaction.accountName}</p>
         </div>
       </div>
