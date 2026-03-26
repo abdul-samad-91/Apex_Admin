@@ -93,4 +93,22 @@ export const withdrawalAPI = {
     api.put(`/withdrawals/${withdrawalId}/status`, data),
 };
 
+// Banner APIs
+export const bannerAPI = {
+  getActiveBanner: () => api.get('/banners/active'),
+  getAllBanners: () => api.get('/banners'),
+  createBanner: (formData) => api.post('/banners', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  }),
+  updateBanner: (id, formData) => api.put(`/banners/${id}`, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  }),
+  deleteBanner: (id) => api.delete(`/banners/${id}`),
+  trackClick: (id) => api.post(`/banners/${id}/click`),
+};
+
 export default api;

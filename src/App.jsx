@@ -13,6 +13,7 @@ import RoiPage from './pages/Roi/RoiPage';
 import ApexCoinRatePage from './pages/ApexCoinRate/ApexCoinRatePage';
 import UnlockRequestsPage from './pages/UnlockRequests/UnlockRequestsPage';
 import WithdrawalsPage from './pages/Withdrawals/WithdrawalsPage';
+import BannersPage from './pages/Banners/BannersPage';
 
 function App() {
   return (
@@ -133,6 +134,16 @@ function App() {
               <ProtectedRoute>
                 <DashboardLayout>
                   <WithdrawalsPage />
+                </DashboardLayout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/dashboard/banners"
+            element={
+              <ProtectedRoute>
+                <DashboardLayout>
+                  <BannersPage />
                 </DashboardLayout>
               </ProtectedRoute>
             }
