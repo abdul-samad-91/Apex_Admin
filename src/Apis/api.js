@@ -51,6 +51,7 @@ export const userAPI = {
   updatePassword: (id, data) => api.put(`/users/${id}/password`, data),
   getPendingUnlocks: () => api.get('/users/pendingUnlocks'),
   approveUnlock: (data) => api.post('/users/approveUnlock', data),
+  rejectUnlock: (data) => api.post('/users/rejectUnlock', data),
   claimDailyProfits: () => api.post('/users/claimDailyProfits'),
 };
 
@@ -85,12 +86,32 @@ export const apexCoinRateAPI = {
   getAllRates: () => api.get('/apexcoinRate/allRates'),
 };
 
+// Rank APIs
+export const rankAPI = {
+  getAllRanks: () => api.get('/ranks/all'),
+  initializeRanks: () => api.post('/ranks/admin/initialize-ranks'),
+  processWeeklyRecalculation: () => api.post('/ranks/admin/process-weekly-recalculation'),
+  recalculateUserRank: (userId) => api.post(`/ranks/recalculate/${userId}`),
+};
+
+// Wallet History APIs
+export const walletHistoryAPI = {
+  getAllWalletHistory: (params = {}) => api.get('/wallet-history/all', { params }),
+  getUserWalletHistory: (userId, params = {}) => api.get(`/wallet-history/user/${userId}`, { params }),
+};
+
 // Withdrawal APIs
 export const withdrawalAPI = {
   getAllWithdrawals: () => api.get('/withdrawals/all'),
   getPendingWithdrawals: () => api.get('/withdrawals/pending'),
   updateWithdrawalStatus: (withdrawalId, data) => 
     api.put(`/withdrawals/${withdrawalId}/status`, data),
+};
+
+// KYC APIs
+export const kycAPI = {
+  getAllKycRequests: (params = {}) => api.get('/kyc/admin/all', { params }),
+  reviewKycRequest: (kycId, data) => api.put(`/kyc/admin/${kycId}/review`, data),
 };
 
 // Banner APIs

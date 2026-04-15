@@ -14,6 +14,9 @@ import ApexCoinRatePage from './pages/ApexCoinRate/ApexCoinRatePage';
 import UnlockRequestsPage from './pages/UnlockRequests/UnlockRequestsPage';
 import WithdrawalsPage from './pages/Withdrawals/WithdrawalsPage';
 import BannersPage from './pages/Banners/BannersPage';
+import KycPage from './pages/Kyc/KycPage';
+import RanksPage from './pages/Ranks/RanksPage';
+import WalletHistoryPage from './pages/WalletHistory/WalletHistoryPage';
 
 function App() {
   return (
@@ -144,6 +147,36 @@ function App() {
               <ProtectedRoute>
                 <DashboardLayout>
                   <BannersPage />
+                </DashboardLayout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/dashboard/kyc"
+            element={
+              <ProtectedRoute>
+                <DashboardLayout>
+                  <KycPage />
+                </DashboardLayout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/dashboard/ranks"
+            element={
+              <ProtectedRoute>
+                <DashboardLayout>
+                  <RanksPage />
+                </DashboardLayout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/dashboard/wallet-history"
+            element={
+              <ProtectedRoute>
+                <DashboardLayout>
+                  <WalletHistoryPage />
                 </DashboardLayout>
               </ProtectedRoute>
             }

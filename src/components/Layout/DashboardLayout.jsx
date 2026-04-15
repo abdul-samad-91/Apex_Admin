@@ -18,6 +18,9 @@ import {
   Unlock,
   ArrowDownToLine,
   Image,
+  IdCard,
+  Trophy,
+  Wallet,
 } from 'lucide-react';
 
 const Sidebar = ({ isOpen, setIsOpen }) => {
@@ -29,7 +32,10 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
     { name: 'Users', icon: Users, path: '/dashboard/users' },
     { name: 'Transactions', icon: CreditCard, path: '/dashboard/transactions' },
     { name: 'Withdrawals', icon: ArrowDownToLine, path: '/dashboard/withdrawals' },
+    { name: 'KYC', icon: IdCard, path: '/dashboard/kyc' },
     { name: 'Unlock Requests', icon: Unlock, path: '/dashboard/unlock-requests' },
+    { name: 'Ranks', icon: Trophy, path: '/dashboard/ranks' },
+    { name: 'Wallet History', icon: Wallet, path: '/dashboard/wallet-history' },
     { name: 'Gateways', icon: Building2, path: '/dashboard/gateways' },
     { name: 'Banners', icon: Image, path: '/dashboard/banners' },
     { name: 'ROI', icon: TrendingUp, path: '/dashboard/roi' },

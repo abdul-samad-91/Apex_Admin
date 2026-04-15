@@ -10,12 +10,14 @@ import {
   Calendar,
   TrendingDown,
   Loader2,
+  XCircle,
 } from 'lucide-react';
 
 const UnlockRequestsPage = () => {
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [processing, setProcessing] = useState(null);
+  const [processingAction, setProcessingAction] = useState('');
 
   useEffect(() => {
     fetchPendingUnlocks();
@@ -36,6 +38,7 @@ const UnlockRequestsPage = () => {
   const handleApprove = async (userId, entryId) => {
     try {
       setProcessing(entryId);
+      setProcessingAction('approve');
       const response = await userAPI.approveUnlock({ userId, entryId });
       toast.success(response.data.message || 'Unlock approved successfully');
       fetchPendingUnlocks(); // Refresh the list
@@ -43,6 +46,27 @@ const UnlockRequestsPage = () => {
       toast.error(error.response?.data?.message || 'Failed to approve unlock');
     } finally {
       setProcessing(null);
+      setProcessingAction('');
+    }
+  };
+
+  const handleReject = async (userId, entryId) => {
+    const reason = window.prompt('Enter reject reason (optional):', 'Rejected by admin');
+    if (reason === null) {
+      return;
+    }
+
+    try {
+      setProcessing(entryId);
+      setProcessingAction('reject');
+      const response = await userAPI.rejectUnlock({ userId, entryId, reason: reason.trim() });
+      toast.success(response.data.message || 'Unlock rejected successfully');
+      fetchPendingUnlocks();
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Failed to reject unlock');
+    } finally {
+      setProcessing(null);
+      setProcessingAction('');
     }
   };
 
@@ -156,23 +180,42 @@ const UnlockRequestsPage = () => {
                       Process After: {formatDate(request.processAfter)}
                     </div>
                     {request.canApprove ? (
-                      <button
-                        onClick={() => handleApprove(request.userId, request.entryId)}
-                        disabled={processing === request.entryId}
-                        className="w-full bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-xl font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
-                      >
-                        {processing === request.entryId ? (
-                          <>
-                            <Loader2 className="w-4 h-4 animate-spin" />
-                            <span>Approving...</span>
-                          </>
-                        ) : (
-                          <>
-                            <CheckCircle className="w-4 h-4" />
-                            <span>Approve</span>
-                          </>
-                        )}
-                      </button>
+                      <div className="grid grid-cols-2 gap-2">
+                        <button
+                          onClick={() => handleApprove(request.userId, request.entryId)}
+                          disabled={processing === request.entryId}
+                          className="w-full bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-xl font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
+                        >
+                          {processing === request.entryId && processingAction === 'approve' ? (
+                            <>
+                              <Loader2 className="w-4 h-4 animate-spin" />
+                              <span>Approving...</span>
+                            </>
+                          ) : (
+                            <>
+                              <CheckCircle className="w-4 h-4" />
+                              <span>Approve</span>
+                            </>
+                          )}
+                        </button>
+                        <button
+                          onClick={() => handleReject(request.userId, request.entryId)}
+                          disabled={processing === request.entryId}
+                          className="w-full bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-xl font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
+                        >
+                          {processing === request.entryId && processingAction === 'reject' ? (
+                            <>
+                              <Loader2 className="w-4 h-4 animate-spin" />
+                              <span>Rejecting...</span>
+                            </>
+                          ) : (
+                            <>
+                              <XCircle className="w-4 h-4" />
+                              <span>Reject</span>
+                            </>
+                          )}
+                        </button>
+                      </div>
                     ) : (
                       <div className="bg-yellow-500/20 text-yellow-400 px-4 py-2 rounded-xl text-sm font-medium flex items-center space-x-2">
                         <Clock className="w-4 h-4" />
