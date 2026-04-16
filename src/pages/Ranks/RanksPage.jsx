@@ -25,18 +25,18 @@ const RanksPage = () => {
     fetchRanks();
   }, []);
 
-  const handleInitializeRanks = async () => {
-    try {
-      setProcessing('initialize');
-      const response = await rankAPI.initializeRanks();
-      toast.success(response.data?.message || 'Ranks initialized successfully');
-      fetchRanks();
-    } catch (error) {
-      toast.error(error.response?.data?.message || 'Failed to initialize ranks');
-    } finally {
-      setProcessing('');
-    }
-  };
+  // const handleInitializeRanks = async () => {
+  //   try {
+  //     setProcessing('initialize');
+  //     const response = await rankAPI.initializeRanks();
+  //     toast.success(response.data?.message || 'Ranks initialized successfully');
+  //     fetchRanks();
+  //   } catch (error) {
+  //     toast.error(error.response?.data?.message || 'Failed to initialize ranks');
+  //   } finally {
+  //     setProcessing('');
+  //   }
+  // };
 
   const handleWeeklyRecalculate = async () => {
     try {
@@ -60,7 +60,7 @@ const RanksPage = () => {
           <p className="text-gray-400 mt-1">Manage rank settings and run rank processing jobs</p>
         </div>
         <div className="flex flex-wrap gap-2">
-          <button
+          {/* <button
             onClick={handleInitializeRanks}
             disabled={processing !== ''}
             className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-xl font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
@@ -76,7 +76,7 @@ const RanksPage = () => {
                 <span>Initialize Ranks</span>
               </>
             )}
-          </button>
+          </button> */}
           <button
             onClick={handleWeeklyRecalculate}
             disabled={processing !== ''}
