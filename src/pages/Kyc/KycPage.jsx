@@ -42,6 +42,9 @@ const formatDate = (value) => {
   });
 };
 
+const normalizeStatus = (status) => String(status || '').trim().toLowerCase();
+const isUnderReviewStatus = (status) => normalizeStatus(status) === 'under_review';
+
 const KycPage = () => {
   const [loading, setLoading] = useState(true);
   const [processingId, setProcessingId] = useState(null);
@@ -52,7 +55,7 @@ const KycPage = () => {
     rejected: 0,
     total: 0,
   });
-  const [statusFilter, setStatusFilter] = useState('all');
+  const [statusFilter, setStatusFilter] = useState('under_review');
   const [searchTerm, setSearchTerm] = useState('');
 
   const fetchKycRequests = async () => {
@@ -84,7 +87,8 @@ const KycPage = () => {
     const normalizedSearch = searchTerm.trim().toLowerCase();
 
     return requests.filter((request) => {
-      const matchesStatus = statusFilter === 'all' || request.status === statusFilter;
+      const requestStatus = normalizeStatus(request.status);
+      const matchesStatus = statusFilter === 'all' || requestStatus === statusFilter;
       if (!matchesStatus) return false;
 
       if (!normalizedSearch) return true;
@@ -105,6 +109,12 @@ const KycPage = () => {
 
   const handleReview = async (requestId, status) => {
     try {
+      const currentRequest = requests.find((request) => request.id === requestId);
+      if (currentRequest && !isUnderReviewStatus(currentRequest.status)) {
+        toast.error(`KYC request is already ${normalizeStatus(currentRequest.status)} and cannot be reviewed again`);
+        return;
+      }
+
       setProcessingId(requestId);
 
       const payload = { status };
@@ -119,6 +129,12 @@ const KycPage = () => {
       }
 
       const response = await kycAPI.reviewKycRequest(requestId, payload);
+      const updatedRequest = response.data?.data;
+      if (updatedRequest?.id) {
+        setRequests((prev) =>
+          prev.map((request) => (request.id === updatedRequest.id ? updatedRequest : request))
+        );
+      }
       toast.success(response.data?.message || `KYC ${status} successfully`);
       await fetchKycRequests();
     } catch (error) {
@@ -129,7 +145,8 @@ const KycPage = () => {
   };
 
   const renderStatusBadge = (status) => {
-    const meta = STATUS_META[status] || STATUS_META.under_review;
+    const normalizedStatus = normalizeStatus(status);
+    const meta = STATUS_META[normalizedStatus] || STATUS_META.under_review;
     const Icon = meta.icon;
 
     return (
@@ -279,7 +296,7 @@ const KycPage = () => {
                 </div>
               </div>
 
-              {request.status === 'rejected' && request.rejectionReason ? (
+              {normalizeStatus(request.status) === 'rejected' && request.rejectionReason ? (
                 <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-3">
                   <p className="text-red-300 text-sm font-medium">Rejection reason</p>
                   <p className="text-gray-200 text-sm mt-1">{request.rejectionReason}</p>
@@ -292,22 +309,28 @@ const KycPage = () => {
                   {request.reviewedByUser?.fullName ? ` by ${request.reviewedByUser.fullName}` : ''}
                 </div>
 
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={() => handleReview(request.id, 'verified')}
-                    disabled={processingId === request.id || request.status === 'verified'}
-                    className="px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-sm disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    {processingId === request.id ? 'Processing...' : 'Approve'}
-                  </button>
-                  <button
-                    onClick={() => handleReview(request.id, 'rejected')}
-                    disabled={processingId === request.id}
-                    className="px-4 py-2 rounded-lg bg-red-500/20 hover:bg-red-500/30 text-red-300 text-sm border border-red-500/30 disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    Reject
-                  </button>
-                </div>
+                {isUnderReviewStatus(request.status) ? (
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => handleReview(request.id, 'verified')}
+                      disabled={processingId === request.id}
+                      className="px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {processingId === request.id ? 'Processing...' : 'Approve'}
+                    </button>
+                    <button
+                      onClick={() => handleReview(request.id, 'rejected')}
+                      disabled={processingId === request.id}
+                      className="px-4 py-2 rounded-lg bg-red-500/20 hover:bg-red-500/30 text-red-300 text-sm border border-red-500/30 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      Reject
+                    </button>
+                  </div>
+                ) : (
+                  <p className="text-xs text-gray-500">
+                    This request is finalized and cannot be reviewed again.
+                  </p>
+                )}
               </div>
             </div>
           ))}

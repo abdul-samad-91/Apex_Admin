@@ -14,6 +14,8 @@ import {
   Search,
   Filter,
   ArrowUpRight,
+  ShieldCheck,
+  ShieldAlert,
 } from 'lucide-react';
 
 const WithdrawalsPage = () => {
@@ -141,6 +143,26 @@ const WithdrawalsPage = () => {
       <span className={`px-2 py-1 rounded-lg text-xs font-semibold border ${colors[network] || colors.BEP20}`}>
         {network}
       </span>
+    );
+  };
+
+  const getOtpVerificationBadge = (verificationStatus) => {
+    const status = verificationStatus || 'otp_verified';
+
+    if (status === 'otp_verified') {
+      return (
+        <div className="bg-emerald-500/20 text-emerald-400 px-3 py-1 rounded-lg text-sm font-medium flex items-center space-x-1">
+          <ShieldCheck className="w-4 h-4" />
+          <span>OTP Verified</span>
+        </div>
+      );
+    }
+
+    return (
+      <div className="bg-orange-500/20 text-orange-400 px-3 py-1 rounded-lg text-sm font-medium flex items-center space-x-1">
+        <ShieldAlert className="w-4 h-4" />
+        <span>OTP Pending</span>
+      </div>
     );
   };
 
@@ -284,7 +306,10 @@ const WithdrawalsPage = () => {
         </div>
       ) : (
         <div className="space-y-4">
-          {filteredWithdrawals.map((withdrawal) => (
+          {filteredWithdrawals.map((withdrawal) => {
+            const isOtpVerified = (withdrawal.verificationStatus || 'otp_verified') === 'otp_verified';
+
+            return (
             <div
               key={withdrawal.id}
               className="bg-[#1a1a1a] rounded-2xl p-6 border border-gray-800/50 hover:border-red-500/30 transition-all"
@@ -312,7 +337,10 @@ const WithdrawalsPage = () => {
                     <span>Amount</span>
                   </div>
                   <p className="text-3xl font-bold text-emerald-400">${withdrawal.amountAfterFee?.toFixed(2)}</p>
-                  <div>{getStatusBadge(withdrawal.status)}</div>
+                  <div className="flex flex-wrap items-center gap-2">
+                    {getStatusBadge(withdrawal.status)}
+                    {getOtpVerificationBadge(withdrawal.verificationStatus)}
+                  </div>
                 </div>
 
                 {/* Wallet Details */}
@@ -347,9 +375,14 @@ const WithdrawalsPage = () => {
                   </div>
                   {withdrawal.status === 'pending' ? (
                     <div className="space-y-2">
+                      {!isOtpVerified && (
+                        <div className="bg-orange-500/10 border border-orange-500/30 rounded-xl p-3 text-center">
+                          <p className="text-xs text-orange-400 font-medium">Waiting for user OTP verification</p>
+                        </div>
+                      )}
                       <button
                         onClick={() => handleMarkAsProcessing(withdrawal.id)}
-                        disabled={processing === withdrawal.id}
+                        disabled={processing === withdrawal.id || !isOtpVerified}
                         className="w-full bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-xl font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
                       >
                         {processing === withdrawal.id ? (
@@ -366,7 +399,7 @@ const WithdrawalsPage = () => {
                       </button>
                       <button
                         onClick={() => handleApprove(withdrawal.id)}
-                        disabled={processing === withdrawal.id}
+                        disabled={processing === withdrawal.id || !isOtpVerified}
                         className="w-full bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-xl font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
                       >
                         {processing === withdrawal.id ? (
@@ -383,7 +416,7 @@ const WithdrawalsPage = () => {
                       </button>
                       <button
                         onClick={() => handleReject(withdrawal.id)}
-                        disabled={processing === withdrawal.id}
+                        disabled={processing === withdrawal.id || !isOtpVerified}
                         className="w-full bg-red-500/20 hover:bg-red-500/30 text-red-400 px-4 py-2 rounded-xl font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
                       >
                         <XCircle className="w-4 h-4" />
@@ -417,7 +450,7 @@ const WithdrawalsPage = () => {
                       </div>
                       <button
                         onClick={() => handleApprove(withdrawal.id)}
-                        disabled={processing === withdrawal.id}
+                        disabled={processing === withdrawal.id || !isOtpVerified}
                         className="w-full bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-xl font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
                       >
                         {processing === withdrawal.id ? (
@@ -441,7 +474,7 @@ const WithdrawalsPage = () => {
                 </div>
               </div>
             </div>
-          ))}
+          );})}
         </div>
       )}
     </div>
