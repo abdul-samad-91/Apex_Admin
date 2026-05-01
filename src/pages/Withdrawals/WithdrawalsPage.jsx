@@ -29,17 +29,25 @@ const WithdrawalsPage = () => {
     fetchWithdrawals();
   }, []);
 
-  const fetchWithdrawals = async () => {
-    try {
-      setLoading(true);
-      const response = await withdrawalAPI.getAllWithdrawals();
-      setWithdrawals(response.data.data?.withdrawals || []);
-    } catch (error) {
-      toast.error(error.response?.data?.message || 'Failed to fetch withdrawals');
-    } finally {
-      setLoading(false);
-    }
-  };
+const fetchWithdrawals = async () => {
+  try {
+    setLoading(true);
+    const response = await withdrawalAPI.getAllWithdrawals();
+
+    const allWithdrawals = response.data.data?.withdrawals || [];
+
+    // ✅ Only keep OTP verified withdrawals
+    const otpVerifiedWithdrawals = allWithdrawals.filter(
+      (w) => (w.verificationStatus || 'otp_verified') === 'otp_verified'
+    );
+
+    setWithdrawals(otpVerifiedWithdrawals);
+  } catch (error) {
+    toast.error(error.response?.data?.message || 'Failed to fetch withdrawals');
+  } finally {
+    setLoading(false);
+  }
+};
 
   const handleUpdateStatus = async (withdrawalId, status, rejectionReason = null, transactionID = null) => {
     try {
@@ -168,14 +176,14 @@ const WithdrawalsPage = () => {
 
   // Filter withdrawals
   const filteredWithdrawals = withdrawals.filter(withdrawal => {
-    const matchesStatus = statusFilter === 'all' || withdrawal.status === statusFilter;
-    const matchesSearch = 
-      withdrawal.withdrawalId?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      withdrawal.user?.fullName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      withdrawal.user?.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      withdrawal.walletAddress?.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    return matchesStatus && matchesSearch;
+  const matchesStatus = statusFilter === 'all' || withdrawal.status === statusFilter;
+  const matchesSearch = 
+    withdrawal.withdrawalId?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    withdrawal.user?.fullName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    withdrawal.user?.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    withdrawal.walletAddress?.toLowerCase().includes(searchTerm.toLowerCase());
+  
+  return matchesStatus && matchesSearch;
   });
 
   // Calculate statistics
@@ -307,7 +315,6 @@ const WithdrawalsPage = () => {
       ) : (
         <div className="space-y-4">
           {filteredWithdrawals.map((withdrawal) => {
-            const isOtpVerified = (withdrawal.verificationStatus || 'otp_verified') === 'otp_verified';
 
             return (
             <div
@@ -375,14 +382,8 @@ const WithdrawalsPage = () => {
                   </div>
                   {withdrawal.status === 'pending' ? (
                     <div className="space-y-2">
-                      {!isOtpVerified && (
-                        <div className="bg-orange-500/10 border border-orange-500/30 rounded-xl p-3 text-center">
-                          <p className="text-xs text-orange-400 font-medium">Waiting for user OTP verification</p>
-                        </div>
-                      )}
                       <button
                         onClick={() => handleMarkAsProcessing(withdrawal.id)}
-                        disabled={processing === withdrawal.id || !isOtpVerified}
                         className="w-full bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-xl font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
                       >
                         {processing === withdrawal.id ? (
@@ -399,7 +400,6 @@ const WithdrawalsPage = () => {
                       </button>
                       <button
                         onClick={() => handleApprove(withdrawal.id)}
-                        disabled={processing === withdrawal.id || !isOtpVerified}
                         className="w-full bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-xl font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
                       >
                         {processing === withdrawal.id ? (
@@ -416,7 +416,6 @@ const WithdrawalsPage = () => {
                       </button>
                       <button
                         onClick={() => handleReject(withdrawal.id)}
-                        disabled={processing === withdrawal.id || !isOtpVerified}
                         className="w-full bg-red-500/20 hover:bg-red-500/30 text-red-400 px-4 py-2 rounded-xl font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
                       >
                         <XCircle className="w-4 h-4" />
@@ -450,7 +449,6 @@ const WithdrawalsPage = () => {
                       </div>
                       <button
                         onClick={() => handleApprove(withdrawal.id)}
-                        disabled={processing === withdrawal.id || !isOtpVerified}
                         className="w-full bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-xl font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
                       >
                         {processing === withdrawal.id ? (
